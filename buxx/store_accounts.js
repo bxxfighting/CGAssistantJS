@@ -6,3 +6,5 @@ const accounts = [
     ['败家仔の弓', '败家仔の衣', '败家仔の鞋', '败家仔の帽', '败家仔の袍'],
     ['败家仔の卡']
 ]
+
+export default accounts
