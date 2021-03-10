@@ -65,5 +65,47 @@ require('./common').then(cga => {
                 })
             })
         })
+    }).then(() = {
+        return leo.loop(() => {
+            leo.todo().then(() => {
+                const emptyCount = cga.getInventoryEmptySlotCount()
+                if (emptyCount > 0) {
+                    const need_money = emptyCount * 20 * fabric.unit
+                    const spread_money = player.gold - need_money
+                    if (spread_money < 0) {
+                        // TODO: 去金币管理员那里取钱
+                        return leo.reject('身上没有钱，买不起, 需要：' + need_money + '，差：' + spread_money)
+                    } else {
+                        return leo.goto(n=>n.falan.fabric).then(() => {
+                            return leo.buy(2, [{index: fabric.index, count: emptyCount * 20}])
+                        })
+                    }
+                }
+            }).then(() => {
+                // TODO: 增加位置判断，如果在位置上就不动了
+                const map = leo.getMapInfo()
+                if (map.name === '') {
+                } else {
+                    return leo.goto(n=>n.falan.m2)
+                }
+            }).then(() => {
+                // 找到自己的工位，并打开交易功能
+                return leo.autoWalkList([
+                    [fabric.x, fabric.y]
+                ]).then(() => {
+                    return leo.turnDir(fabric.dir).then(() => {
+                        return cga.EnableFlags(cga.ENABLE_FLAG_TRADE, true); //开启交易
+                    })
+                })
+            }).then(() => {
+                // 招待顾客
+                // 有两种策略
+                // 1、增加白名单校验，只有自己的角色才可以交易
+                // 2、交易需要给钱，并且比店里贵1金币(这是我的策略)
+                const customers = cga.getTeamPlayers()
+            }).then(() = {
+                return leo.delay(1000);
+            })
+        }).catch (console.log)
     })
 });
